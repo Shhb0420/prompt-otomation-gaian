@@ -85,7 +85,9 @@ async function sendQuestion(question, index, total, apiKey, nodeId) {
             body: JSON.stringify(data)
         });
 
+        console.log('ress', response.headers)
         const result = await response.json();
+        console.log('resss', result)
 
         if (result.choices && result.choices.length > 0) {
             console.log(chalk.yellowBright(`A: ${result.choices[0].message.content}`));
@@ -107,7 +109,11 @@ async function startAskingRepeatedly(filePath, intervalSeconds, times, apiKey, n
 
     for (let i = 0; i < Math.min(times, questions.length); i++) {
         await sendQuestion(questions[i], i, times, apiKey, nodeId);
-        await new Promise(resolve => setTimeout(resolve, intervalSeconds * 1000));
+        if(i % 15 == 0) {
+            await new Promise(resolve => setTimeout(resolve, 45 * 60000));
+        } else {
+            await new Promise(resolve => setTimeout(resolve, intervalSeconds * 60000));
+        }
     }
 
     console.log(chalk.greenBright("🎉 Selesai mengirim semua pertanyaan."));
@@ -124,7 +130,7 @@ async function main() {
     rl.close();  
 
     await generateAndSaveQuestions(filePath, 1000);
-    await startAskingRepeatedly(filePath, 5, 10000, apiKey, nodeId);
+    await startAskingRepeatedly(filePath, 2, 10000, apiKey, nodeId);
 }
 
 main();
