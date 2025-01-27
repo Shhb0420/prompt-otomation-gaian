@@ -118,10 +118,13 @@ const filePath = 'pertanyaan.json';
 async function main() {
     console.log(chalk.cyanBright("🚀 Selamat datang di skrip pengujian GaiaNet!"));
 
+    const apiKey = await askQuestion("🔑 Masukkan API Key Anda: ");
+    const nodeId = await askQuestion("🌐 Masukkan Node ID Anda: ");
+
     rl.close();  
 
     await generateAndSaveQuestions(filePath, 1000);
-    await startAskingRepeatedly(filePath, 5, 10000, process.env.GAIA_API_KEY, process.env.NODE_ID_KEY);
+    await startAskingRepeatedly(filePath, 5, 10000, apiKey, nodeId);
 }
 
 main();
